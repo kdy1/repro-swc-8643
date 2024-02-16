@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Model Viewer Example</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@^0.160.0/build/three.module.min.js"
+        }
+      }
+    </script>
+    <!-- Non-minified version, which works. -->
+    <!--
+    <script
+      type="module"
+      src="node_modules/@google/model-viewer/dist/model-viewer-module.js"
+    ></script>
+    -->
+    <script type="module" src="output.js"></script>
+    <style>
+      model-viewer {
+        width: 100%;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <model-viewer
+      id="blendViewer"
+      camera-controls
+      touch-action="pan-y"
+      ar
+      src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+      alt="A 3D model of an astronaut"
+    >
+    </model-viewer>
+  </body>
+</html>

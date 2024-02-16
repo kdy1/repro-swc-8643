@@ -1,0 +1,16 @@
+{
+  "name": "swc-minification-bug-model-viewer",
+  "version": "0.0.1",
+  "description": "Package showcasing a minification issue in @swc/core minify v1.4.1 and 1.4.2-nightly-20240216.1",
+  "main": "index.mjs",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@google/model-viewer": "^3.4.0",
+    "@swc/core": "^1.4.2-nightly-20240216.1"
+  },
+  "devDependencies": {
+    "@types/js-beautify": "^1.14.3",
+    "js-beautify": "^1.15.1"
+  }
+}
