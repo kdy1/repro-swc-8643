@@ -70,7 +70,6 @@ class EventDispatcher {
 	}
 }
 let _lut = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0a", "0b", "0c", "0d", "0e", "0f", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "1a", "1b", "1c", "1d", "1e", "1f", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "2a", "2b", "2c", "2d", "2e", "2f", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "3a", "3b", "3c", "3d", "3e", "3f", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "4a", "4b", "4c", "4d", "4e", "4f", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "5a", "5b", "5c", "5d", "5e", "5f", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "6a", "6b", "6c", "6d", "6e", "6f", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "7a", "7b", "7c", "7d", "7e", "7f", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "8a", "8b", "8c", "8d", "8e", "8f", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "9a", "9b", "9c", "9d", "9e", "9f", "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9", "aa", "ab", "ac", "ad", "ae", "af", "b0", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "ba", "bb", "bc", "bd", "be", "bf", "c0", "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "ca", "cb", "cc", "cd", "ce", "cf", "d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "d9", "da", "db", "dc", "dd", "de", "df", "e0", "e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "ea", "eb", "ec", "ed", "ee", "ef", "f0", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "fa", "fb", "fc", "fd", "fe", "ff"],
-	_seed = 1234567,
 	DEG2RAD = Math.PI / 180,
 	RAD2DEG = 180 / Math.PI;
 
@@ -84,14 +83,6 @@ function generateUUID() {
 
 function clamp$1(value, min, max) {
 	return Math.max(min, Math.min(max, value))
-}
-
-function euclideanModulo(n, m) {
-	return (n % m + m) % m
-}
-
-function lerp$1(x, y, t) {
-	return (1 - t) * x + t * y
 }
 
 function isPowerOfTwo(value) {
@@ -144,91 +135,13 @@ function normalize(value, array) {
 	}
 }
 let MathUtils = {
-	DEG2RAD: DEG2RAD,
-	RAD2DEG: RAD2DEG,
-	generateUUID: generateUUID,
-	clamp: clamp$1,
-	euclideanModulo: euclideanModulo,
-	mapLinear: function(x, a1, a2, b1, b2) {
-		return b1 + (x - a1) * (b2 - b1) / (a2 - a1)
-	},
-	inverseLerp: function(x, y, value) {
-		return x !== y ? (value - x) / (y - x) : 0
-	},
-	lerp: lerp$1,
-	damp: function(x, y, lambda, dt) {
-		return lerp$1(x, y, 1 - Math.exp(-lambda * dt))
-	},
-	pingpong: function(x, length = 1) {
-		return length - Math.abs(euclideanModulo(x, 2 * length) - length)
-	},
-	smoothstep: function(x, min, max) {
-		return x <= min ? 0 : x >= max ? 1 : (x = (x - min) / (max - min)) * x * (3 - 2 * x)
-	},
-	smootherstep: function(x, min, max) {
-		return x <= min ? 0 : x >= max ? 1 : (x = (x - min) / (max - min)) * x * x * (x * (6 * x - 15) + 10)
-	},
-	randInt: function(low, high) {
-		return low + Math.floor(Math.random() * (high - low + 1))
-	},
-	randFloat: function(low, high) {
-		return low + Math.random() * (high - low)
-	},
-	randFloatSpread: function(range) {
-		return range * (.5 - Math.random())
-	},
-	seededRandom: function(s) {
-		void 0 !== s && (_seed = s);
-		let t = _seed += 1831565813;
-		return t = Math.imul(t ^ t >>> 15, 1 | t), (((t ^= t + Math.imul(t ^ t >>> 7, 61 | t)) ^ t >>> 14) >>> 0) / 4294967296
-	},
 	degToRad: function(degrees) {
 		return degrees * DEG2RAD
 	},
 	radToDeg: function(radians) {
 		return radians * RAD2DEG
 	},
-	isPowerOfTwo: isPowerOfTwo,
-	ceilPowerOfTwo: function(value) {
-		return Math.pow(2, Math.ceil(Math.log(value) / Math.LN2))
-	},
-	floorPowerOfTwo: floorPowerOfTwo,
-	setQuaternionFromProperEuler: function(q, a, b, c, order) {
-		let cos = Math.cos,
-			sin = Math.sin,
-			c2 = cos(b / 2),
-			s2 = sin(b / 2),
-			c13 = cos((a + c) / 2),
-			s13 = sin((a + c) / 2),
-			c1_3 = cos((a - c) / 2),
-			s1_3 = sin((a - c) / 2),
-			c3_1 = cos((c - a) / 2),
-			s3_1 = sin((c - a) / 2);
-		switch (order) {
-			case "XYX":
-				q.set(c2 * s13, s2 * c1_3, s2 * s1_3, c2 * c13);
-				break;
-			case "YZY":
-				q.set(s2 * s1_3, c2 * s13, s2 * c1_3, c2 * c13);
-				break;
-			case "ZXZ":
-				q.set(s2 * c1_3, s2 * s1_3, c2 * s13, c2 * c13);
-				break;
-			case "XZX":
-				q.set(c2 * s13, s2 * s3_1, s2 * c3_1, c2 * c13);
-				break;
-			case "YXY":
-				q.set(s2 * c3_1, c2 * s13, s2 * s3_1, c2 * c13);
-				break;
-			case "ZYZ":
-				q.set(s2 * s3_1, s2 * c3_1, c2 * s13, c2 * c13);
-				break;
-			default:
-				console.warn("THREE.MathUtils: .setQuaternionFromProperEuler() encountered an unknown order: " + order)
-		}
-	},
-	normalize: normalize,
-	denormalize: denormalize
+	normalize: normalize
 };
 class Vector2 {
 	constructor(x = 0, y = 0) {
@@ -3059,7 +2972,7 @@ class Color {
 		return this.r = r, this.g = g, this.b = b, ColorManagement.toWorkingColorSpace(this, colorSpace1), this
 	}
 	setHSL(h, s, l, colorSpace1 = ColorManagement.workingColorSpace) {
-		if (h = euclideanModulo(h, 1), s = clamp$1(s, 0, 1), l = clamp$1(l, 0, 1), 0 === s) this.r = this.g = this.b = l;
+		if (h = (h % 1 + 1) % 1, s = clamp$1(s, 0, 1), l = clamp$1(l, 0, 1), 0 === s) this.r = this.g = this.b = l;
 		else {
 			let p = l <= .5 ? l * (1 + s) : l + s - l * s,
 				q = 2 * l - p;
@@ -3191,10 +3104,11 @@ class Color {
 		return this.r = color1.r + (color2.r - color1.r) * alpha, this.g = color1.g + (color2.g - color1.g) * alpha, this.b = color1.b + (color2.b - color1.b) * alpha, this
 	}
 	lerpHSL(color, alpha) {
+		var x, x1, x2;
 		this.getHSL(_hslA), color.getHSL(_hslB);
-		let h = lerp$1(_hslA.h, _hslB.h, alpha),
-			s = lerp$1(_hslA.s, _hslB.s, alpha),
-			l = lerp$1(_hslA.l, _hslB.l, alpha);
+		let h = (x = _hslA.h, (1 - alpha) * x + alpha * _hslB.h),
+			s = (x1 = _hslA.s, (1 - alpha) * x1 + alpha * _hslB.s),
+			l = (x2 = _hslA.l, (1 - alpha) * x2 + alpha * _hslB.l);
 		return this.setHSL(h, s, l), this
 	}
 	setFromVector3(v) {
@@ -3358,17 +3272,11 @@ let _tables = function() {
 			offsetTable: offsetTable
 		}
 	}(),
-	DataUtils = {
-		toHalfFloat: function(val) {
-			Math.abs(val) > 65504 && console.warn("THREE.DataUtils.toHalfFloat(): Value out of range."), val = clamp$1(val, -65504, 65504), _tables.floatView[0] = val;
-			let f = _tables.uint32View[0],
-				e = f >> 23 & 511;
-			return _tables.baseTable[e] + ((8388607 & f) >> _tables.shiftTable[e])
-		},
-		fromHalfFloat: function(val) {
-			let m = val >> 10;
-			return _tables.uint32View[0] = _tables.mantissaTable[_tables.offsetTable[m] + (1023 & val)] + _tables.exponentTable[m], _tables.floatView[0]
-		}
+	DataUtils_toHalfFloat = function(val) {
+		Math.abs(val) > 65504 && console.warn("THREE.DataUtils.toHalfFloat(): Value out of range."), val = clamp$1(val, -65504, 65504), _tables.floatView[0] = val;
+		let f = _tables.uint32View[0],
+			e = f >> 23 & 511;
+		return _tables.baseTable[e] + ((8388607 & f) >> _tables.shiftTable[e])
 	},
 	_vector$9 = new Vector3,
 	_vector2$1 = new Vector2;
@@ -4066,8 +3974,7 @@ function getUnlitUniformColorSpace(renderer) {
 	return null === renderer.getRenderTarget() ? renderer.outputColorSpace : ColorManagement.workingColorSpace
 }
 let UniformsUtils = {
-	clone: cloneUniforms,
-	merge: mergeUniforms
+	clone: cloneUniforms
 };
 class ShaderMaterial extends Material$1 {
 	constructor(parameters) {
@@ -11592,22 +11499,15 @@ class AnimationClip {
 		return this.constructor.toJSON(this)
 	}
 }
-let Cache = {
-	enabled: !1,
-	files: {},
-	add: function(key, file) {
+let Cache_add = function(key, file) {
 		!1 !== this.enabled && (this.files[key] = file)
 	},
-	get: function(key) {
+	Cache_get = function(key) {
 		if (!1 !== this.enabled) return this.files[key]
 	},
-	remove: function(key) {
+	Cache_remove = function(key) {
 		delete this.files[key]
-	},
-	clear: function() {
-		this.files = {}
-	}
-};
+	};
 class LoadingManager {
 	constructor(onLoad, onProgress, onError) {
 		let urlModifier;
@@ -11682,8 +11582,8 @@ class FileLoader extends Loader {
 		super(manager)
 	}
 	load(url, onLoad, onProgress, onError) {
-		void 0 === url && (url = ""), void 0 !== this.path && (url = this.path + url), url = this.manager.resolveURL(url);
-		let cached = Cache.get(url);
+		void 0 === url && (url = ""), void 0 !== this.path && (url = this.path + url);
+		let cached = Cache_get(url = this.manager.resolveURL(url));
 		if (void 0 !== cached) return this.manager.itemStart(url), setTimeout(() => {
 			onLoad && onLoad(cached), this.manager.itemEnd(url)
 		}, 0), cached;
@@ -11760,7 +11660,7 @@ class FileLoader extends Loader {
 					}
 			}
 		}).then(data => {
-			Cache.add(url, data);
+			Cache_add(url, data);
 			let callbacks = loading[url];
 			delete loading[url];
 			for (let i = 0, il = callbacks.length; i < il; i++) {
@@ -11792,16 +11692,16 @@ class ImageLoader extends Loader {
 		super(manager)
 	}
 	load(url, onLoad, onProgress, onError) {
-		void 0 !== this.path && (url = this.path + url), url = this.manager.resolveURL(url);
+		void 0 !== this.path && (url = this.path + url);
 		let scope = this,
-			cached = Cache.get(url);
+			cached = Cache_get(url = this.manager.resolveURL(url));
 		if (void 0 !== cached) return scope.manager.itemStart(url), setTimeout(function() {
 			onLoad && onLoad(cached), scope.manager.itemEnd(url)
 		}, 0), cached;
 		let image = createElementNS("img");
 
 		function onImageLoad() {
-			removeEventListeners(), Cache.add(url, this), onLoad && onLoad(this), scope.manager.itemEnd(url)
+			removeEventListeners(), Cache_add(url, this), onLoad && onLoad(this), scope.manager.itemEnd(url)
 		}
 
 		function onImageError(event) {
@@ -12094,9 +11994,9 @@ class ImageBitmapLoader extends Loader {
 		return this.options = options, this
 	}
 	load(url, onLoad, onProgress, onError) {
-		void 0 === url && (url = ""), void 0 !== this.path && (url = this.path + url), url = this.manager.resolveURL(url);
+		void 0 === url && (url = ""), void 0 !== this.path && (url = this.path + url);
 		let scope = this,
-			cached = Cache.get(url);
+			cached = Cache_get(url = this.manager.resolveURL(url));
 		if (void 0 !== cached) {
 			if (scope.manager.itemStart(url), cached.then) {
 				cached.then(imageBitmap => {
@@ -12119,11 +12019,11 @@ class ImageBitmapLoader extends Loader {
 				colorSpaceConversion: "none"
 			}))
 		}).then(function(imageBitmap) {
-			return Cache.add(url, imageBitmap), onLoad && onLoad(imageBitmap), scope.manager.itemEnd(url), imageBitmap
+			return Cache_add(url, imageBitmap), onLoad && onLoad(imageBitmap), scope.manager.itemEnd(url), imageBitmap
 		}).catch(function(e) {
-			onError && onError(e), Cache.remove(url), scope.manager.itemError(url), scope.manager.itemEnd(url)
+			onError && onError(e), Cache_remove(url), scope.manager.itemError(url), scope.manager.itemEnd(url)
 		});
-		Cache.add(url, promise), scope.manager.itemStart(url)
+		Cache_add(url, promise), scope.manager.itemStart(url)
 	}
 }
 class PropertyMixer {
@@ -20808,7 +20708,7 @@ class RGBELoader extends DataTextureLoader {
 				let halfArray = new Uint16Array(4 * (numElements = image_rgba_data.length / 4));
 				for (let j = 0; j < numElements; j++) ! function(sourceArray, sourceOffset, destArray, destOffset) {
 					let scale = Math.pow(2, sourceArray[sourceOffset + 3] - 128) / 255;
-					destArray[destOffset + 0] = DataUtils.toHalfFloat(Math.min(sourceArray[sourceOffset + 0] * scale, 65504)), destArray[destOffset + 1] = DataUtils.toHalfFloat(Math.min(sourceArray[sourceOffset + 1] * scale, 65504)), destArray[destOffset + 2] = DataUtils.toHalfFloat(Math.min(sourceArray[sourceOffset + 2] * scale, 65504)), destArray[destOffset + 3] = DataUtils.toHalfFloat(1)
+					destArray[destOffset + 0] = DataUtils_toHalfFloat(Math.min(sourceArray[sourceOffset + 0] * scale, 65504)), destArray[destOffset + 1] = DataUtils_toHalfFloat(Math.min(sourceArray[sourceOffset + 1] * scale, 65504)), destArray[destOffset + 2] = DataUtils_toHalfFloat(Math.min(sourceArray[sourceOffset + 2] * scale, 65504)), destArray[destOffset + 3] = DataUtils_toHalfFloat(1)
 				}(image_rgba_data, 4 * j, halfArray, 4 * j);
 				data = halfArray, type = 1016;
 				break;
