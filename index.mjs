@@ -16,12 +16,13 @@ const content = readFileSync(sourcePath, "utf-8");
 const { code, map } = await minify(content, {
   module: true,
   ecma: 2015,
+  mangle: false
 });
 
 // Write the minified content back to the file
 writeFileSync('output.js', code, "utf-8");
 
-writeFileSync('output-beautified.js', beautify.default.js(code, {
+writeFileSync('out.js', beautify.default.js(code, {
   indent_size: 4,
   indent_with_tabs: true
 }), "utf-8");
